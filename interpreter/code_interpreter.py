@@ -198,6 +198,9 @@ class CodeInterpreter:
     if self.language == "python":
       # This lets us stop execution when error happens (which is not default -i behavior)
       # And solves a bunch of indentation problems-- if everything's indented, -i treats it as one block
+      if "pip install" in code:
+        package_name = code.split()[-1]
+        code = f"import subprocess\nsubprocess.check_call(['pip', 'install', '{package_name}'])"
       code = wrap_in_try_except(code)
 
     # Remove any whitespace lines, as this will break indented blocks
